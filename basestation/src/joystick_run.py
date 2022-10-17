@@ -12,26 +12,31 @@ def joy_callback(joy_inp):
     joy_inp_axes = joy_inp.axes
     joy_inp_buttons = joy_inp.buttons
 
-    arm_out = [120 if x % 2 == 1 else 0 for x in range(12)]
+    arm_out = [80 if x % 2 == 1 else 0 for x in range(12)]
     arm_out.append(0)
-    drive_out = [0, 120, 0]
+    drive_out = [0, 0, 0]
 
     # Drive
-    if joy_inp_axes[0] == 1:
+    if joy_inp_axes[0] > 0:
         # Anticlockwise
-        drive_out[0] = 4
-    elif joy_inp_axes[0] == -1:
-        # Clockwise
         drive_out[0] = 2
-    elif joy_inp_axes[1] == 1:
+        drive_out[1] = int(abs(joy_inp_axes[0]*120))
+    elif joy_inp_axes[0] < 0:
+        # Clockwise
+        drive_out[0] = 4
+        drive_out[1] = int(abs(joy_inp_axes[0]*120))
+    elif joy_inp_axes[1] > 0:
         # Forward
         drive_out[0] = 1
-    elif joy_inp_axes[1] == -1:
+        drive_out[1] = int(abs(joy_inp_axes[1]*120))
+    elif joy_inp_axes[1] < 0:
         # Backward
         drive_out[0] = 3
+        drive_out[1] = int(abs(joy_inp_axes[1]*120))
     else:
         # Rest
         drive_out[0] = 0
+        drive_out[1] = 0
 
     # Arm
 
