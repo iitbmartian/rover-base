@@ -3,9 +3,10 @@
 import rospy
 from std_msgs.msg import Float64MultiArray
 from sensor_msgs.msg import Joy
+from drive_msg.msg import drive_msg
 
 arm_pub = rospy.Publisher('/rover/arm_directives', Float64MultiArray, queue_size=1)
-drive_pub = rospy.Publisher('/rover/drive_directives', Float64MultiArray, queue_size=1)
+drive_pub = rospy.Publisher('/rover/drive_directives', drive_msg, queue_size=1)
 
 
 def joy_callback(joy_inp):
@@ -15,21 +16,25 @@ def joy_callback(joy_inp):
     arm_out = [80 if x % 2 == 1 else 0 for x in range(12)]
     arm_out.append(0)
     drive_out = [0, 0, 0]
+    drive_out_msg = drive_msg()
+    drive_out_msg.mode = "autonomous"
 
     # Drive
-    if joy_inp_axes[0] > 0:
+    if joy_inp_axes[0] > 25/120:
         # Anticlockwise
-        drive_out[0] = 2
-        drive_out[1] = int(abs(joy_inp_axes[0]*120))
-    elif joy_inp_axes[0] < 0:
-        # Clockwise
+        drive_out_msg.direction = "anti-clockwise"
+        drive_out_msg.speed = int(abs(joy_inp_axes[0]*120))
         drive_out[0] = 4
         drive_out[1] = int(abs(joy_inp_axes[0]*120))
-    elif joy_inp_axes[1] > 0:
+    elif joy_inp_axes[0] < -25/120:
+        # Clockwise
+        drive_out[0] = 2
+        drive_out[1] = int(abs(joy_inp_axes[0]*120))
+    elif joy_inp_axes[1] > 25/120:
         # Forward
         drive_out[0] = 1
         drive_out[1] = int(abs(joy_inp_axes[1]*120))
-    elif joy_inp_axes[1] < 0:
+    elif joy_inp_axes[1] < -25/120:
         # Backward
         drive_out[0] = 3
         drive_out[1] = int(abs(joy_inp_axes[1]*120))
@@ -88,8 +93,8 @@ def joy_callback(joy_inp):
     else:
         arm_out[10] = 0
 
-    arm_out_msg, drive_out_msg = Float64MultiArray(), Float64MultiArray()
-    arm_out_msg.data, drive_out_msg.data = arm_out, drive_out
+    arm_out_msg = Float64MultiArray()
+    arm_out_msg.data = arm_out, drive_out
     arm_pub.publish(arm_out_msg)
     drive_pub.publish(drive_out_msg)
 
