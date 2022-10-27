@@ -3,9 +3,9 @@
 import rospy
 from std_msgs.msg import Float64MultiArray
 from sensor_msgs.msg import Joy
-from drive_msg.msg import drive_msg
+from rover_msgs.msg import drive_msg, arm_msg
 
-arm_pub = rospy.Publisher('/rover/arm_directives', Float64MultiArray, queue_size=1)
+arm_pub = rospy.Publisher('/rover/arm_directives', arm_msg, queue_size=1)
 drive_pub = rospy.Publisher('/rover/drive_directives', drive_msg, queue_size=1)
 
 
@@ -13,90 +13,107 @@ def joy_callback(joy_inp):
     joy_inp_axes = joy_inp.axes
     joy_inp_buttons = joy_inp.buttons
 
-    arm_out = [80 if x % 2 == 1 else 0 for x in range(12)]
-    arm_out.append(0)
-    drive_out = [0, 0, 0]
-    drive_out_msg = drive_msg()
-    drive_out_msg.mode = "autonomous"
+    arm_out = arm_msg()
+    drive_out = drive_msg()
+    drive_out.mode = "manual"
+    arm_out.shoulder_actuator.mode = "manual"
+    arm_out.elbow_actuator.mode = "manual"
+    arm_out.base_motor.mode = "manual"
+    arm_out.finger_motor.mode = "manual"
+    arm_out.wrist_actuator.mode = "manual"
+    arm_out.rotation_motor.mode = "manual"
 
     # Drive
     if joy_inp_axes[0] > 25/120:
         # Anticlockwise
-        drive_out_msg.direction = "anti-clockwise"
-        drive_out_msg.speed = int(abs(joy_inp_axes[0]*120))
-        drive_out[0] = 4
-        drive_out[1] = int(abs(joy_inp_axes[0]*120))
+        drive_out.direction = "anticlockwise"
+        drive_out.speed = int(abs(joy_inp_axes[0]*120))
     elif joy_inp_axes[0] < -25/120:
         # Clockwise
-        drive_out[0] = 2
-        drive_out[1] = int(abs(joy_inp_axes[0]*120))
+        drive_out.direction = "clockwise"
+        drive_out.speed = int(abs(joy_inp_axes[0]*120))
     elif joy_inp_axes[1] > 25/120:
         # Forward
-        drive_out[0] = 1
-        drive_out[1] = int(abs(joy_inp_axes[1]*120))
+        drive_out.direction = "forward"
+        drive_out.speed = int(abs(joy_inp_axes[1]*120))
     elif joy_inp_axes[1] < -25/120:
         # Backward
-        drive_out[0] = 3
-        drive_out[1] = int(abs(joy_inp_axes[1]*120))
+        drive_out.direction = "backward"
+        drive_out.speed = int(abs(joy_inp_axes[1]*120))
     else:
         # Rest
-        drive_out[0] = 0
-        drive_out[1] = 0
+        drive_out.direction = "stop"
+        drive_out.speed = 0
 
     # Arm
-
     # ShoulderActuator
-    if joy_inp_axes[7] == 1:
-        arm_out[0] = 1
-    elif joy_inp_axes[7] == -1:
-        arm_out[0] = -1
+    if joy_inp_axes[4] > 25/120:
+        arm_out.shoulder_actuator.direction = "forward"
+        arm_out.shoulder_actuator.speed = int(abs(joy_inp_axes[4]*120))
+    elif joy_inp_axes[4] < -25/120:
+        arm_out.shoulder_actuator.direction = "backward"
+        arm_out.shoulder_actuator.speed = int(abs(joy_inp_axes[4] * 120))
     else:
-        arm_out[0] = 0
+        arm_out.shoulder_actuator.direction = "stop"
+        arm_out.shoulder_actuator.speed = 0
 
-    # ElbowActuator
-    if joy_inp_axes[6] == 1:
-        arm_out[2] = 1
-    elif joy_inp_axes[6] == -1:
-        arm_out[2] = -1
+    # Elbow Actuator
+    if joy_inp_axes[7] > 25/120:
+        arm_out.elbow_actuator.direction = "forward"
+        arm_out.elbow_actuator.speed = int(abs(joy_inp_axes[7]*120))
+    elif joy_inp_axes[7] < -25/120:
+        arm_out.elbow_actuator.direction = "backward"
+        arm_out.elbow_actuator.speed = int(abs(joy_inp_axes[7] * 120))
     else:
-        arm_out[2] = 0
+        arm_out.elbow_actuator.direction = "stop"
+        arm_out.elbow_actuator.speed = 0
+
+    # Base Motors
+    if joy_inp_axes[3] > 25/120:
+        arm_out.base_motor.direction = "forward"
+        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*120))
+    elif joy_inp_axes[3] < -25/120:
+        arm_out.base_motor.direction = "backward"
+        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*120))
+    else:
+        arm_out.base_motor.direction = "stop"
+        arm_out.base_motor.speed = 0
+
+    # Finger Motor
+    if joy_inp_buttons[1] == 1:
+        arm_out.finger_motor.direction = "forward"
+        arm_out.finger_motor.speed = 120
+    elif joy_inp_buttons[2] == 1:
+        arm_out.finger_motor.direction = "backward"
+        arm_out.finger_motor.speed = 120
+    else:
+        arm_out.finger_motor.direction = "stop"
+        arm_out.finger_motor.speed = 0
 
     # Wrist Actuator
     if joy_inp_buttons[0] == 1:
-        arm_out[4] = 1
+        arm_out.wrist_actuator.direction = "forward"
+        arm_out.wrist_actuator.speed = 120
     elif joy_inp_buttons[3] == 1:
-        arm_out[4] = -1
+        arm_out.wrist_actuator.direction = "backward"
+        arm_out.wrist_actuator.speed = 120
     else:
-        arm_out[4] = 0
+        arm_out.wrist_actuator.direction = "stop"
+        arm_out.wrist_actuator.speed = 0
 
-    # Finger Actuator
-    if joy_inp_buttons[1] == 1:
-        arm_out[6] = 1
-    elif joy_inp_buttons[2] == 1:
-        arm_out[6] = -1
-    else:
-        arm_out[6] = 0
-
-    # Base Rotation
-    if joy_inp_axes[2] == -1:
-        arm_out[8] = 1
-    elif joy_inp_axes[5] == -1:
-        arm_out[8] = -1
-    else:
-        arm_out[8] = 0
-
-    # Gripper Motor
+    # Rotation Motor
     if joy_inp_buttons[4] == 1:
-        arm_out[10] = 1
+        arm_out.rotation_motor.direction = "forward"
+        arm_out.rotation_motor.speed = 120
     elif joy_inp_buttons[5] == 1:
-        arm_out[10] = -1
+        arm_out.rotation_motor.direction = "backward"
+        arm_out.rotation_motor.speed = 120
     else:
-        arm_out[10] = 0
+        arm_out.rotation_motor.direction = "stop"
+        arm_out.rotation_motor.speed = 0
 
-    arm_out_msg = Float64MultiArray()
-    arm_out_msg.data = arm_out, drive_out
-    arm_pub.publish(arm_out_msg)
-    drive_pub.publish(drive_out_msg)
+    arm_pub.publish(arm_out)
+    drive_pub.publish(drive_out)
 
 
 if __name__ == '__main__':
