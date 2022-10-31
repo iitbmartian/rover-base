@@ -48,10 +48,10 @@ def joy_callback(joy_inp):
     # Arm
     # ShoulderActuator
     if joy_inp_axes[4] > 25/120:
-        arm_out.shoulder_actuator.direction = "forward"
+        arm_out.shoulder_actuator.direction = "backward"
         arm_out.shoulder_actuator.speed = int(abs(joy_inp_axes[4]*120))
     elif joy_inp_axes[4] < -25/120:
-        arm_out.shoulder_actuator.direction = "backward"
+        arm_out.shoulder_actuator.direction = "forward"
         arm_out.shoulder_actuator.speed = int(abs(joy_inp_axes[4] * 120))
     else:
         arm_out.shoulder_actuator.direction = "stop"
@@ -71,10 +71,10 @@ def joy_callback(joy_inp):
     # Base Motors
     if joy_inp_axes[3] > 25/120:
         arm_out.base_motor.direction = "forward"
-        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*120))
+        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*20))
     elif joy_inp_axes[3] < -25/120:
         arm_out.base_motor.direction = "backward"
-        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*120))
+        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*20))
     else:
         arm_out.base_motor.direction = "stop"
         arm_out.base_motor.speed = 0
@@ -91,10 +91,10 @@ def joy_callback(joy_inp):
         arm_out.finger_motor.speed = 0
 
     # Wrist Actuator
-    if joy_inp_buttons[0] == 1:
+    if joy_inp_buttons[3] == 1:
         arm_out.wrist_actuator.direction = "forward"
         arm_out.wrist_actuator.speed = 120
-    elif joy_inp_buttons[3] == 1:
+    elif joy_inp_buttons[0] == 1:
         arm_out.wrist_actuator.direction = "backward"
         arm_out.wrist_actuator.speed = 120
     else:
@@ -102,10 +102,10 @@ def joy_callback(joy_inp):
         arm_out.wrist_actuator.speed = 0
 
     # Rotation Motor
-    if joy_inp_buttons[4] == 1:
+    if joy_inp_buttons[5] == 1:
         arm_out.rotation_motor.direction = "forward"
         arm_out.rotation_motor.speed = 120
-    elif joy_inp_buttons[5] == 1:
+    elif joy_inp_buttons[4] == 1:
         arm_out.rotation_motor.direction = "backward"
         arm_out.rotation_motor.speed = 120
     else:
