@@ -27,6 +27,7 @@ List of IP Addresses in the `/etc/hosts` file:
 * Git pull `rover-base` in src, and `catkin_make`
 
 ## [Configuring Joystick](http://wiki.ros.org/joy/Tutorials/ConfiguringALinuxJoystick)
+![Joystick_Mapping](https://user-images.githubusercontent.com/99526193/203838436-4851d851-5d19-49b1-bad6-4e7ecf908092.jpg)
 
 ## Running the Rover
 
