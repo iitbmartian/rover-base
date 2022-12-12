@@ -6,7 +6,7 @@ from sensor_msgs.msg import Joy
 from rover_msgs.msg import drive_msg, arm_msg
 
 arm_pub = rospy.Publisher('/rover/arm_directives', arm_msg, queue_size=1)
-drive_pub = rospy.Publisher('/rover/drive_directives', drive_msg, queue_size=1)
+drive_pub = rospy.Publisher('/rover/drive_directives/manual', drive_msg, queue_size=1)
 
 
 def joy_callback(joy_inp):
