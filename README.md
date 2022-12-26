@@ -35,7 +35,7 @@ List of IP Addresses in the `/etc/hosts` file:
 * Go into the base_ws and `source devel/setup.bash`, `roslaunch basestation joystick_run.launch`
 * Connect remotely via the command: `ssh rover@MRT-NUC`, password is: 2409
 * Run the following commands in sequential order on the NUC:
-  * `export ROS_MASTER_URI=http://@hostname:11311/`
+  * `master <hostname>`
   * `cd ~/ws/rover_ws`
   * `.-ws`
   * | Package | Command |
