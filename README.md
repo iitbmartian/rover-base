@@ -20,6 +20,8 @@ List of IP Addresses in the `/etc/hosts` file:
 | Predator | 192.168.2.6 | Harsh Lappy - basestation |
 | vedika-ubuntu | 192.168.2.7 | Vedika Lappy - basestation |
 | nishant | 192.168.2.8 | Nishant Lappy - basestation |
+| N/A | 192.168.2.50 onwards | Phones for GUI |
+| N/A | 192.168.2.60 onwards | Panorama GUI |
 
 ## Creating Workspace
 
