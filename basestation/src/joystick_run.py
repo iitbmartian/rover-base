@@ -72,13 +72,21 @@ def joy_callback(joy_inp):
     # Base Motors
     if joy_inp_axes[3] > 25/120:
         arm_out.base_motor.direction = "forward"
-        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*50))
+        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*35))
     elif joy_inp_axes[3] < -25/120:
         arm_out.base_motor.direction = "backward"
-        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*50))
+        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*35))
     else:
         arm_out.base_motor.direction = "stop"
         arm_out.base_motor.speed = 0
+    
+    # Max Base Motor
+    if joy_inp_buttons[6] == 1:
+        arm_out.base_motor.direction = "forward"
+        arm_out.base_motor.speed = 100
+    elif joy_inp_buttons[7] == 1:
+        arm_out.base_motor.direction = "backward"
+        arm_out.base_motor.speed = 100
 
     # Finger Motor
     if joy_inp_buttons[1] == 1:
