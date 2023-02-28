@@ -22,7 +22,7 @@ def joy_callback(joy_inp):
     arm_out.finger_motor.mode = "manual"
     arm_out.wrist_actuator.mode = "manual"
     arm_out.rotation_motor.mode = "manual"
-    arm_out.carriage_actuator.mode = "manual"
+    arm_out.elbow_rotation.mode = "manual"
 
     # Drive
     if joy_inp_axes[0] > 25/120:
@@ -121,16 +121,16 @@ def joy_callback(joy_inp):
         arm_out.rotation_motor.direction = "stop"
         arm_out.rotation_motor.speed = 0
 
-    # Carriage Actuators
+    # Elbow Rotation
     if joy_inp_axes[2] < 0:
-        arm_out.carriage_actuator.direction = "forward"
-        arm_out.carriage_actuator.speed = 120
+        arm_out.elbow_rotation.direction = "forward"
+        arm_out.elbow_rotation.speed = int(abs(joy_inp_axes[2]*120))
     elif joy_inp_axes[5] < 0:
-        arm_out.carriage_actuator.direction = "backward"
-        arm_out.carriage_actuator.speed = 120
+        arm_out.elbow_rotation.direction = "backward"
+        arm_out.elbow_rotation.speed = int(abs(joy_inp_axes[5]*120))
     else:
-        arm_out.carriage_actuator.direction = "stop"
-        arm_out.carriage_actuator.speed = 0
+        arm_out.elbow_rotation.direction = "stop"
+        arm_out.elbow_rotation.speed = 0
 
     arm_pub.publish(arm_out)
     drive_pub.publish(drive_out)
