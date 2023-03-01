@@ -19,10 +19,10 @@ def joy_callback(joy_inp):
     arm_out.shoulder_actuator.mode = "manual"
     arm_out.elbow_actuator.mode = "manual"
     arm_out.base_motor.mode = "manual"
-    arm_out.finger_motor.mode = "manual"
+    arm_out.elbow_motor.mode = "manual"
     arm_out.wrist_actuator.mode = "manual"
-    arm_out.rotation_motor.mode = "manual"
-    arm_out.elbow_rotation.mode = "manual"
+    arm_out.gripper.mode = "manual"
+    arm_out.gripper_rot.mode = "manual"
 
     # Drive
     if joy_inp_axes[0] > 25/120:
@@ -72,10 +72,10 @@ def joy_callback(joy_inp):
     # Base Motors
     if joy_inp_axes[3] > 25/120:
         arm_out.base_motor.direction = "forward"
-        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*35))
+        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*120))
     elif joy_inp_axes[3] < -25/120:
         arm_out.base_motor.direction = "backward"
-        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*35))
+        arm_out.base_motor.speed = int(abs(joy_inp_axes[3]*120))
     else:
         arm_out.base_motor.direction = "stop"
         arm_out.base_motor.speed = 0
@@ -83,21 +83,21 @@ def joy_callback(joy_inp):
     # Max Base Motor
     if joy_inp_buttons[6] == 1:
         arm_out.base_motor.direction = "forward"
-        arm_out.base_motor.speed = 100
+        arm_out.base_motor.speed = 120
     elif joy_inp_buttons[7] == 1:
         arm_out.base_motor.direction = "backward"
-        arm_out.base_motor.speed = 100
+        arm_out.base_motor.speed = 120
 
-    # Finger Motor
+    # Gripper
     if joy_inp_buttons[1] == 1:
-        arm_out.finger_motor.direction = "forward"
-        arm_out.finger_motor.speed = 120
+        arm_out.gripper.direction = "forward"
+        arm_out.gripper.speed = 120
     elif joy_inp_buttons[2] == 1:
-        arm_out.finger_motor.direction = "backward"
-        arm_out.finger_motor.speed = 120
+        arm_out.gripper.direction = "backward"
+        arm_out.gripper.speed = 120
     else:
-        arm_out.finger_motor.direction = "stop"
-        arm_out.finger_motor.speed = 0
+        arm_out.gripper.direction = "stop"
+        arm_out.gripper.speed = 0
 
     # Wrist Actuator
     if joy_inp_buttons[3] == 1:
@@ -110,27 +110,27 @@ def joy_callback(joy_inp):
         arm_out.wrist_actuator.direction = "stop"
         arm_out.wrist_actuator.speed = 0
 
-    # Rotation Motor
+    # Gripper Rotation
     if joy_inp_buttons[5] == 1:
-        arm_out.rotation_motor.direction = "forward"
-        arm_out.rotation_motor.speed = 120
+        arm_out.gripper_rot.direction = "forward"
+        arm_out.gripper_rot.speed = 120
     elif joy_inp_buttons[4] == 1:
-        arm_out.rotation_motor.direction = "backward"
-        arm_out.rotation_motor.speed = 120
+        arm_out.gripper_rot.direction = "backward"
+        arm_out.gripper_rot.speed = 120
     else:
-        arm_out.rotation_motor.direction = "stop"
-        arm_out.rotation_motor.speed = 0
+        arm_out.gripper_rot.direction = "stop"
+        arm_out.gripper_rot.speed = 0
 
-    # Elbow Rotation
+    # Elbow Motor
     if joy_inp_axes[2] < 0:
-        arm_out.elbow_rotation.direction = "forward"
-        arm_out.elbow_rotation.speed = int(abs(joy_inp_axes[2]*120))
+        arm_out.elbow_motor.direction = "forward"
+        arm_out.elbow_motor.speed = int(abs(joy_inp_axes[2]*120))
     elif joy_inp_axes[5] < 0:
-        arm_out.elbow_rotation.direction = "backward"
-        arm_out.elbow_rotation.speed = int(abs(joy_inp_axes[5]*120))
+        arm_out.elbow_motor.direction = "backward"
+        arm_out.elbow_motor.speed = int(abs(joy_inp_axes[5]*120))
     else:
-        arm_out.elbow_rotation.direction = "stop"
-        arm_out.elbow_rotation.speed = 0
+        arm_out.elbow_motor.direction = "stop"
+        arm_out.elbow_motor.speed = 0
 
     arm_pub.publish(arm_out)
     drive_pub.publish(drive_out)
