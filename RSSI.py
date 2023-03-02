@@ -29,7 +29,7 @@ signal.signal(signal.SIGINT,sigint_handler)
 
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
-webbrowser = webdriver.Firefox(service=Service(executable_path="geckodriver"))
+webbrowser = webdriver.Firefox(service=Service(executable_path="./geckodriver"))
 
 # webbrowser=webdriver.Firefox(executable_path="/home/khush/.local/share/WebDriverManager/gecko/v0.29.0/geckodriver-v0.29.0-linux64/geckodriver")
 webbrowser.maximize_window()
