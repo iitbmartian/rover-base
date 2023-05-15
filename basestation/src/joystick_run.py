@@ -79,14 +79,6 @@ def joy_callback(joy_inp):
     else:
         arm_out.base_motor.direction = "stop"
         arm_out.base_motor.speed = 0
-    
-    # Max Base Motor
-    if joy_inp_buttons[6] == 1:
-        arm_out.base_motor.direction = "forward"
-        arm_out.base_motor.speed = 120
-    elif joy_inp_buttons[7] == 1:
-        arm_out.base_motor.direction = "backward"
-        arm_out.base_motor.speed = 120
 
     # Gripper
     if joy_inp_buttons[2] == 1:

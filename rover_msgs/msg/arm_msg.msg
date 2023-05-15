@@ -5,3 +5,4 @@ drive_msg wrist_actuator
 drive_msg elbow_motor
 drive_msg gripper
 drive_msg gripper_rot
+string bio
