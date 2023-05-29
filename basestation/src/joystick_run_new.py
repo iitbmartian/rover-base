@@ -113,6 +113,17 @@ def joy_callback(joy_inp):
         arm_out.gripper_rot.direction = "stop"
         arm_out.gripper_rot.speed = 0
 
+    #Soil Box
+    if joy_inp_axes[6] == 1:
+        arm_out.soil_box.direction = "forward"
+        arm_out.soil_box.speed = 120
+    elif joy_inp_axes[6] == -1:
+        arm_out.soil_box.direction = "backward"
+        arm_out.soil_box.speed = 120
+    else:
+        arm_out.soil_box.direction = "stop"
+        arm_out.soil_box.speed = 0
+
     # Elbow Motor
     if joy_inp_axes[5] < 0:
         arm_out.elbow_motor.direction = "forward"

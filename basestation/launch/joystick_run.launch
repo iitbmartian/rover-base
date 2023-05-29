@@ -1,5 +1,6 @@
 <launch>
 	<param name="joy_node/dev" value="/dev/input/js0"/>
 	<node pkg="basestation" name="basestation_joystick" type="joystick_run.py" output="screen" required="true" />
+	<node pkg="basestation" name="basestation_joystick_rpi" type="joystick_run_rpi.py" output="screen" required="true" />
 	<node pkg="joy" name="joy_node" type="joy_node" output="screen" required="true"/>
 </launch>
