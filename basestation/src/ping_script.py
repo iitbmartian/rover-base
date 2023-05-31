@@ -30,25 +30,24 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, sigint_handler)
     rospy.init_node("Ping_Node")
     rospy.loginfo("Starting Ping Node")
-    iter_time = rospy.Rate(1)
+    iter_time = rospy.Rate(0.2)
     while True:
         os.system("clear")
+
         if not (ping("192.168.69.15") and ping("192.168.69.2")):
-            if not ping("192.168.69.15"):
-                if not ping("192.168.69.2"):
-                    if not ping("192.168.69.101"):
-                        print()
-                        print("ONBOARD ROUTER GAYA")
-                        if not ping("192.168.69.254"):
-                            print()
-                            print("COMMS UD GAYA, INTERVENTION LE BC")
-                            if not ping("192.168.69.1"):
-                                print()
-                                print("BAHAAR JAAKE RUCKUS THEEK KAR")
-                                if not ping("192.168.69.100"):
-                                    print()
-                                    print("FORGET URC")
+            ping("192.168.69.15")
+            ping("192.168.69.2")
+            ping("192.168.69.101")
+            ping("192.168.69.254")
+            ping("192.168.69.1")
+            ping("192.168.69.100")
         else:
-            print()
-            print("CHAL RAHA, URC PODIUM")
+            print("NUC and RPi Connected!!")
+        print()
+        ping("192.168.69.202")
+        print()
+        ping("192.168.69.203")
+        print()
+        ping("192.168.69.204")
+        print()
         iter_time.sleep()
