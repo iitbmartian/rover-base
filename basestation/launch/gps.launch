@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="basestation" name="GPS_Tracker" type="gps_tracking.py" output="screen" required="true" />
+</launch>
