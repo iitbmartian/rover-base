@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="basestation" name="ping_checker" type="ping_script.py" output="screen" required="true" />
+</launch>
