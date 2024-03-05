@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from std_msgs.msg import Float64MultiArray
@@ -68,6 +68,15 @@ def joy_callback(joy_inp):
     else:
         arm_out.elbow_actuator.direction = "stop"
         arm_out.elbow_actuator.speed = 0
+    # if (joy_inp_axes[5] < 0.65) or (joy_inp_axes[7] < -25/120):
+    #     arm_out.elbow_actuator.direction = "forward"
+    #     arm_out.elbow_actuator.speed = max(int(abs(joy_inp_axes[7]*120)), int(abs((joy_inp_axes[5]-1)*60)))
+    # elif (joy_inp_axes[2] < 0.65) or (joy_inp_axes[7] > 25/120):
+    #     arm_out.elbow_actuator.direction = "backward"
+    #     arm_out.elbow_actuator.speed = max(int(abs(joy_inp_axes[7] * 120)), int(abs((joy_inp_axes[2]-1)*60)))
+    # else:
+    #     arm_out.elbow_actuator.direction = "stop"
+    #     arm_out.elbow_actuator.speed = 0
 
     # Base Motors
     if joy_inp_axes[3] < -25/120:
@@ -93,10 +102,10 @@ def joy_callback(joy_inp):
 
     # Wrist Actuator
     if joy_inp_buttons[3] == 1:
-        arm_out.wrist_actuator.direction = "forward"
+        arm_out.wrist_actuator.direction = "backward"
         arm_out.wrist_actuator.speed = 120
     elif joy_inp_buttons[0] == 1:
-        arm_out.wrist_actuator.direction = "backward"
+        arm_out.wrist_actuator.direction = "forward"
         arm_out.wrist_actuator.speed = 120
     else:
         arm_out.wrist_actuator.direction = "stop"
@@ -104,25 +113,26 @@ def joy_callback(joy_inp):
 
     # Gripper Rotation
     if joy_inp_buttons[4] == 1:
-        arm_out.gripper_rot.direction = "forward"
+        arm_out.gripper_rot.direction = "backward"
         arm_out.gripper_rot.speed = 120
     elif joy_inp_buttons[5] == 1:
-        arm_out.gripper_rot.direction = "backward"
+        arm_out.gripper_rot.direction = "forward"
         arm_out.gripper_rot.speed = 120
     else:
         arm_out.gripper_rot.direction = "stop"
         arm_out.gripper_rot.speed = 0
 
     # Elbow Motor
-    if joy_inp_axes[5] < 0:
-        arm_out.elbow_motor.direction = "forward"
-        arm_out.elbow_motor.speed = int(abs(joy_inp_axes[2]*120))
-    elif joy_inp_axes[2] < 0:
+    if (joy_inp_axes[5] < 0) or (joy_inp_axes[6] < -25/120):
         arm_out.elbow_motor.direction = "backward"
+        arm_out.elbow_motor.speed = int(abs(joy_inp_axes[2]*120))
+    elif (joy_inp_axes[2] < 0) or (joy_inp_axes[6] > 25/120):
+        arm_out.elbow_motor.direction = "forward"
         arm_out.elbow_motor.speed = int(abs(joy_inp_axes[5]*120))
     else:
         arm_out.elbow_motor.direction = "stop"
         arm_out.elbow_motor.speed = 0
+
 
     arm_pub.publish(arm_out)
     drive_pub.publish(drive_out)

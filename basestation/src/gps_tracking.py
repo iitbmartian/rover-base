@@ -10,10 +10,8 @@ from std_msgs.msg import Float64MultiArray
 global location
 
 def gps_callback(inp):
-    plt.clf()
-    # plt.figure(figsize=(10,6))
-    plt.xlim(inp.data[0]-0.0025,inp.data[0]+0.0025)
-    plt.ylim(inp.data[1]-0.0025,inp.data[1]+0.0025)
+    plt.xlim(0,200)
+    plt.ylim(0,200)
     x = [0,0]
     y = [0,0]
     point = plt.plot(x,y,'ro')[0]
@@ -26,7 +24,7 @@ def gps_callback(inp):
     for j in range(location):
         plt.annotate('Loc'+str(j+1),(x[j],y[j]))
     print(point)
-    plt.pause(0.01)
+    plt.pause(1)
 
 if __name__=='__main__':
     rospy.init_node('GPS_Node')

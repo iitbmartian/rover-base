@@ -1,0 +1,13 @@
+<launch>
+	<param name="joy_node/dev" value="/dev/input/js0"/>
+	<!-- <node pkg="basestation" name="basestation_joystick" type="joystick_run.py" output="screen" required="true" /> -->
+	<node pkg="joy" name="joy_node" type="joy_node" output="screen" required="true">
+        <param name="deadzone" value="0.2" />
+        <param name="autorepeat_rate" value="40" />
+        <param name="coalesce_interval" value="0.025" />
+    </node>
+	<node pkg="teleop_twist_joy" name="teleop_node" type="teleop_node" output="screen" required="true">
+        <rosparam command="load" ns="" file="$(find basestation)/config/joystick.yaml"/>
+        <remap from="cmd_vel" to="/rover/drive_directives/manual"/>
+    </node>
+</launch>
